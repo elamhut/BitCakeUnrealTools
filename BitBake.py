@@ -16,7 +16,7 @@ batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
 
 
 def build():
-    subprocess.call(['{}RunUAT.bat'.format(batch_files_dir),
+    build= subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
                      '-ScriptsForProject="{}"'.format(uproject_path),
                      'BuildCookRun',
                      '-nocompileeditor',
@@ -36,6 +36,10 @@ def build():
                      '-clientconfig=Development',
                      '-serverconfig=Development',
                      '-utf8output'])
+
+    print(build)
+    print("Return Code:")
+    print(build.returncode)
 
 
 if __name__ == "__main__":
