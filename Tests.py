@@ -1,5 +1,3 @@
-import os
+import datetime
 
-print("Topzera")
-print(os.getcwd())
-print(os.listdir(os.getcwd()))
+print(datetime.datetime.now().strftime("%y%m%d"))

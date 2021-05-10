@@ -1,6 +1,7 @@
 import unreal
 import subprocess
-
+import os
+import datetime
 
 project_name = "NekoNeko"
 project_dir = unreal.Paths().project_dir()
@@ -16,30 +17,31 @@ batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
 
 
 def build():
-    build= subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
-                     '-ScriptsForProject="{}"'.format(uproject_path),
-                     'BuildCookRun',
-                     '-nocompileeditor',
-                     '-installed',
-                     '-nop4',
-                     '-project="{}"'.format(uproject_path),
-                     '-cook',
-                     '-stage',
-                     '-archivedirectory="{}Build"'.format(project_dir),
-                     '-package',
-                     '-pak',
-                     '-prereqs',
-                     '-nodebuginfo',
-                     '-targetplatform=Win64',
-                     '-build',
-                     '-target=NekoNeko',
-                     '-clientconfig=Development',
-                     '-serverconfig=Development',
-                     '-utf8output'])
+    build = subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
+                            '-ScriptsForProject="{}"'.format(uproject_path),
+                            'BuildCookRun',
+                            '-nocompileeditor',
+                            '-installed',
+                            '-nop4',
+                            '-project="{}"'.format(uproject_path),
+                            '-cook',
+                            '-stage',
+                            '-archivedirectory="{}Build"'.format(project_dir),
+                            '-package',
+                            '-pak',
+                            '-prereqs',
+                            '-nodebuginfo',
+                            '-targetplatform=Win64',
+                            '-build',
+                            '-target=NekoNeko',
+                            '-clientconfig=Development',
+                            '-serverconfig=Development',
+                            '-utf8output'])
 
-    print(build)
-    print("Return Code:")
-    print(build.returncode)
+    if build.returncode == 0:
+        date = datetime.datetime.now().strftime("%y%m%d")
+        folder_name = "{}_NekoNeko".format(date)
+        os.rename("{}Build/WindowsNoEditor/".format(project_dir), "{}Build/{}/".format(project_dir, folder_name))
 
 
 if __name__ == "__main__":
