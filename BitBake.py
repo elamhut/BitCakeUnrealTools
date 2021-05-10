@@ -28,6 +28,7 @@ def build():
                             '-project="{}"'.format(uproject_path),
                             '-cook',
                             '-stage',
+                            '-archive',
                             '-archivedirectory="{}"'.format(build_location),
                             '-package',
                             '-pak',
