@@ -1,8 +1,10 @@
 import unreal
 import subprocess
 import os
+import sys
 import datetime
 from shutil import rmtree
+
 
 project_name = "NekoNeko"
 project_dir = unreal.Paths().project_dir()
@@ -17,6 +19,8 @@ editor_cmd_location = "{}Binaries/Win64/UE4Editor-cmd.exe".format(engine_locatio
 build_location = "{}Build/".format(project_dir)
 batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
 
+steamsdk_user_dir = str(sys.argv[1])
+appid = str(sys.argv[2])
 
 def build():
     build = subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
@@ -54,7 +58,8 @@ def build():
 
 
 if __name__ == "__main__":
-    build()
+    # build()
+    # print(steamsdk_user_dir)
     # date = datetime.datetime.now().strftime("%y%m%d")
     # folder_name = "{}_{}".format(date, project_name)
     # constructed_path = "{}{}".format(build_location, folder_name)

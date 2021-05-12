@@ -1,0 +1,14 @@
+"appbuild"
+{
+	"appid" "111111111"
+	"desc" "Description you want"
+	"buildoutput" "X:\Steam\altpoot"
+	"contentroot" ""
+	"setlive" "padaria"
+	"preview" "0"
+	"local"	""
+	"depots"
+	{
+		"111111111"	"D:\SteamSDK\tools\ContentBuilder\scripts\generic_depot.vdf"
+	}
+}

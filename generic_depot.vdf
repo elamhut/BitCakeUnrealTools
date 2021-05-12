@@ -1,0 +1,12 @@
+"DepotBuildConfig"
+{
+	"DepotID" "111111111"
+	"contentroot" "X:\YourGame\BuildFolder"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+	"FileExclusion" "*.pdb"
+}
