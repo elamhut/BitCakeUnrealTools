@@ -2,13 +2,13 @@
 {
 	"appid" "123456789"
 	"desc" "Description you want"
-	"buildoutput" "D:\SteamSDK\tools\ContentBuilder\output"
+	"buildoutput" "d:\SteamSDK\tools\ContentBuilder\output"
 	"contentroot" ""
 	"setlive" "internaltest"
 	"preview" "0"
 	"local" ""
 	"depots"
 	{
-		"123456789" "D:\PythonProjects\UnrealStuff\generic_depot.vdf"
+		"123456789" "D:\PythonProjects\UnrealStuff\custom_depot.vdf"
 	}
 }
