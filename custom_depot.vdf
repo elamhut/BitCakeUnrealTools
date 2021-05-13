@@ -1,0 +1,12 @@
+"DepotBuildConfig"
+{
+	"DepotID" "123456789"
+	"contentroot" "d:\NekoNeko\Build"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+	"FileExclusion" "*.pdb"
+}
