@@ -1,0 +1,9 @@
+[
+	{
+		"Name": "NekoNekoData",
+		"ProjectName": "NekoNeko",
+		"AppID": "123456789",
+		"SteamSDKDirectory": "d:\\SteamSDK\\",
+		"BuildDirectory": "d:\\NekoNeko\\Build\\"
+	}
+]
