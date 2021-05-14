@@ -1,9 +1,9 @@
 [
-	{
-		"Name": "NekoNekoData",
-		"ProjectName": "NekoNeko",
-		"AppID": "123456789",
-		"SteamSDKDirectory": "d:\\SteamSDK\\",
-		"BuildDirectory": "d:\\NekoNeko\\Build\\"
-	}
+    {
+        "Name": "NekoNekoData",
+        "ProjectName": "JogoDoPaoloSussa",
+        "AppID": "789456123",
+        "SteamSDKDirectory": "d:\\SteamSDK\\PaoloSussa",
+        "BuildDirectory": "E:/PlexMedia"
+    }
 ]

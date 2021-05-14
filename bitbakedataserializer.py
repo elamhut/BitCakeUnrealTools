@@ -1,28 +1,25 @@
+import os
 import sys
 import json
 
 
-# bitdata = str(sys.argv[1])
-
-
 def data_serialize(in_data):
     # Open Project JSON to Edit
-    json_file = open('generic_projectdata.json', 'r+')
+    json_dir = os.path.dirname(__file__)
+    json_file = open('{}/generic_projectdata.json'.format(json_dir), 'r+')
     project_json = json.load(json_file)
 
-    print(project_json[0])
-
-    split_data = in_data.split(":")
+    # Get Argument, split it into Key and Value and use the Key to find and replace the new Data inside the JSON
+    split_data = in_data.split("|")
     project_json[0][split_data[0]] = split_data[1]
 
-    print(project_json[0])
-
-    print("*"*40)
-    print(json.dumps(project_json[0][split_data[0]]))
-
-    json_file.write(json.dumps(project_json[0], indent=4))
+    # Move Carat to the start of the file, delete everything than write the new data
+    json_file.seek(0)
+    json_file.truncate()
+    json_file.write(json.dumps(project_json, indent=4))
     json_file.close()
 
+
 if __name__ == '__main__':
-    dummydata = 'AppID:987654321'
-    data_serialize(dummydata)
+    bitdata = str(sys.argv[1])
+    data_serialize(bitdata)
