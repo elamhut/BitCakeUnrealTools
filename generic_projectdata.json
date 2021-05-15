@@ -1,9 +1,11 @@
 [
     {
         "Name": "NekoNekoData",
-        "ProjectName": "JogoDoPaoloSussa",
-        "AppID": "789456123",
-        "SteamSDKDirectory": "d:\\SteamSDK\\PaoloSussa",
-        "BuildDirectory": "E:/PlexMedia"
+        "ProjectName": "NekoNeko",
+        "AppID": "1030000",
+        "SteamSDKDirectory": "D:/SteamSDK",
+        "BuildDirectory": "D:/NekoNeko/Build",
+        "SteamLogin": "elamhut",
+        "SteamPassword": "GabeNewell42"
     }
 ]
