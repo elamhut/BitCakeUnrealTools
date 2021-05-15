@@ -3,6 +3,7 @@
 
 import vdf
 import os
+import json
 
 
 def builder_setup(appid, sdk_dir, build_branch):
@@ -61,7 +62,6 @@ def depot_setup(appid, build_dir):
 
 
 def upload_to_steam():
-    import json
     import subprocess
 
     data_dir = os.path.dirname(__file__)
@@ -87,5 +87,14 @@ def upload_to_steam():
 
 
 if __name__ == '__main__':
+    data_dir = os.path.dirname(__file__)
+    data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')
+    bake_data = json.load(data_file)
+
+    appid = bake_data[0]['AppID']
+    steam_sdk_dir = bake_data[0]['SteamSDKDirectory']
+    build_dir = bake_data[0]['BuildDirectory']
+
     builder_setup(appid, steam_sdk_dir, branch)
     depot_setup(appid, build_dir)
+    upload_to_steam()
