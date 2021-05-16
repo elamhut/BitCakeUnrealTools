@@ -4,21 +4,27 @@
 import vdf
 import os
 import json
+from bitbakedataserializer import load_bitbake_data
 
 
-def builder_setup(appid, sdk_dir, build_branch):
-    output_dir = sdk_dir + "\\tools\\ContentBuilder\\output"
+def app_build_setup():
+
+    bitbake_data = load_bitbake_data()
+    output_dir = bitbake_data[0]['SteamSDKDirectory'] + "/tools/ContentBuilder/output"
+    appid = bitbake_data[0]['AppID']
+    steam_branch = bitbake_data[0]['SteamBranch']
+
     builder_vdf = vdf.load(open('generic_app_build.vdf'))
     depot_vdf = os.getcwd()
 
     # Writes all values to the App Build VDF
     builder_vdf['appbuild']['appid'] = appid
     builder_vdf['appbuild']['buildoutput'] = output_dir
-    builder_vdf['appbuild']['setlive'] = build_branch
+    builder_vdf['appbuild']['setlive'] = steam_branch
 
     # Deletes all current depots to add new ones
     builder_vdf['appbuild']['depots'].clear()
-    builder_vdf['appbuild']['depots'][appid] = depot_vdf + "\\custom_depot.vdf"
+    builder_vdf['appbuild']['depots'][appid] = depot_vdf + "\custom_depot.vdf"
 
     # Temporarily dumps users parameters on a VDF
     with open('custom_app_build.vdf', 'w+') as in_file:
@@ -37,12 +43,16 @@ def builder_setup(appid, sdk_dir, build_branch):
         out_file.writelines(all_lines)
 
 
-def depot_setup(appid, build_dir):
+def depot_setup(build_folder):
+
+    bitbake_data = load_bitbake_data()
+    appid = bitbake_data[0]['AppID']
+    build_dir = bitbake_data[0]['BuildDirectory']
     depot_vdf = vdf.load(open('generic_depot.vdf'))
 
     # Writes all values to the Depot VDF
     depot_vdf['DepotBuildConfig']['DepotID'] = appid
-    depot_vdf['DepotBuildConfig']['contentroot'] = build_dir
+    depot_vdf['DepotBuildConfig']['contentroot'] = "{}/{}".format(build_dir, build_folder)
 
     # Temporarily dumps users parameters on a VDF
     with open('custom_depot.vdf', 'w+') as in_file:
@@ -61,8 +71,12 @@ def depot_setup(appid, build_dir):
         out_file.writelines(all_lines)
 
 
-def upload_to_steam():
+def upload_to_steam(folder_name):
     import subprocess
+
+    folder_name = folder_name
+    app_build_setup()
+    depot_setup(folder_name)
 
     data_dir = os.path.dirname(__file__)
     data_file = open('{}/generic_projectdata.json'.format(data_dir), 'r')
@@ -87,14 +101,6 @@ def upload_to_steam():
 
 
 if __name__ == '__main__':
-    data_dir = os.path.dirname(__file__)
-    data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')
-    bake_data = json.load(data_file)
-
-    appid = bake_data[0]['AppID']
-    steam_sdk_dir = bake_data[0]['SteamSDKDirectory']
-    build_dir = bake_data[0]['BuildDirectory']
-
-    builder_setup(appid, steam_sdk_dir, branch)
-    depot_setup(appid, build_dir)
-    upload_to_steam()
+    # app_build_setup()
+    # depot_setup()
+    upload_to_steam("210515_NekoNeko")

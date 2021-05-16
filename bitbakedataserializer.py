@@ -3,6 +3,14 @@ import sys
 import json
 
 
+def load_bitbake_data():
+    data_dir = os.path.dirname(__file__)
+    data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')
+    bake_data = json.load(data_file)
+
+    return bake_data
+
+
 def data_serialize(in_data):
     # Open Project JSON to Edit
     json_dir = os.path.dirname(__file__)

@@ -50,6 +50,8 @@ def build():
                                    '-serverconfig=Development',
                                    '-utf8output'])
 
+    # Construct the folder name to backup the build and upload to Steam
+    folder_name = ""
     if build_config.returncode == 0:
         # Construct Paths and Folder Name base on today's date
         date = datetime.datetime.now().strftime("%y%m%d")
@@ -63,6 +65,8 @@ def build():
             os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
         else:
             os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
+
+    return folder_name
 
 
 if __name__ == "__main__":

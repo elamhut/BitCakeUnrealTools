@@ -1,9 +1,0 @@
-['D:\\PythonProjects\\UnrealStuff',
- 'D:\\NekoNeko\\Intermediate\\PythonStub',
- 'D:\\PythonProjects\\UnrealStuff',
- 'D:\\Unreal\\UE_4.26\\Engine\\Binaries\\ThirdParty\\Python3\\Win64\\python37.zip',
- 'D:\\Unreal\\UE_4.26\\Engine\\Binaries\\ThirdParty\\Python3\\Win64\\DLLs',
- 'D:\\Unreal\\UE_4.26\\Engine\\Binaries\\ThirdParty\\Python3\\Win64\\lib',
- 'D:\\Unreal\\UE_4.26\\Engine\\Binaries\\ThirdParty\\Python3\\Win64',
- 'C:\\Users\\nzxt-desktop\\AppData\\Roaming\\Python\\Python37\\site-packages',
- 'D:\\Unreal\\UE_4.26\\Engine\\Binaries\\ThirdParty\\Python3\\Win64\\lib\\site-packages']
