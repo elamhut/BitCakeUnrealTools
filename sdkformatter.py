@@ -14,7 +14,7 @@ def app_build_setup():
     appid = bitbake_data[0]['AppID']
     steam_branch = bitbake_data[0]['SteamBranch']
 
-    builder_vdf = vdf.load(open('generic_app_build.vdf'))
+    builder_vdf = vdf.load(open('{}/generic_app_build.vdf'.format(os.path.dirname(__file__)), 'r'))
     depot_vdf = os.getcwd()
 
     # Writes all values to the App Build VDF
@@ -24,7 +24,11 @@ def app_build_setup():
 
     # Deletes all current depots to add new ones
     builder_vdf['appbuild']['depots'].clear()
-    builder_vdf['appbuild']['depots'][appid] = depot_vdf + "\custom_depot.vdf"
+
+    # Hack to increase app id by 1, assuming the base Steam Depots are always AppID + 1
+    # TODO: Add support for more than 1 depot
+    depot_key = int(appid) + 1
+    builder_vdf['appbuild']['depots'][str(depot_key)] = depot_vdf + "\custom_depot.vdf"
 
     # Temporarily dumps users parameters on a VDF
     with open('custom_app_build.vdf', 'w+') as in_file:
@@ -46,12 +50,13 @@ def app_build_setup():
 def depot_setup(build_folder):
 
     bitbake_data = load_bitbake_data()
-    appid = bitbake_data[0]['AppID']
+    depot_id = bitbake_data[0]['AppID']
     build_dir = bitbake_data[0]['BuildDirectory']
-    depot_vdf = vdf.load(open('generic_depot.vdf'))
+    depot_vdf = vdf.load(open('{}/generic_depot.vdf'.format(os.path.dirname(__file__)), 'r'))
 
     # Writes all values to the Depot VDF
-    depot_vdf['DepotBuildConfig']['DepotID'] = appid
+    depot_id = int(depot_id) + 1
+    depot_vdf['DepotBuildConfig']['DepotID'] = str(depot_id)
     depot_vdf['DepotBuildConfig']['contentroot'] = "{}/{}".format(build_dir, build_folder)
 
     # Temporarily dumps users parameters on a VDF
@@ -74,7 +79,6 @@ def depot_setup(build_folder):
 def upload_to_steam(folder_name):
     import subprocess
 
-    folder_name = folder_name
     app_build_setup()
     depot_setup(folder_name)
 
@@ -93,6 +97,7 @@ def upload_to_steam(folder_name):
                                     password,
                                     '+run_app_build',
                                     vdf_file,
+                                    '+quit',
                                     ])
 
     print(upload_config.returncode)
@@ -103,4 +108,6 @@ def upload_to_steam(folder_name):
 if __name__ == '__main__':
     # app_build_setup()
     # depot_setup()
+    # print("*" * 40)
+    # depot_setup("210515_NekoNeko")
     upload_to_steam("210515_NekoNeko")
