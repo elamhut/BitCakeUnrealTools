@@ -1,7 +1,7 @@
 "appbuild"
 {
 	"appid" "1030000"
-	"desc" "Description you want"
+	"desc" "Current Changeset: 1028"
 	"buildoutput" "D:/SteamSDK/tools/ContentBuilder/output"
 	"contentroot" ""
 	"setlive" "internaltest"

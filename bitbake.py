@@ -22,9 +22,9 @@ uproject_path = "{}{}.uproject".format(project_dir, project_name)
 uproject_path = unreal.Paths().convert_relative_path_to_full(uproject_path)
 engine_location = unreal.Paths().engine_dir()
 engine_location = unreal.Paths().convert_relative_path_to_full(engine_location)
-editor_location = "{}Binaries/Win64/UE4Editor.exe".format(engine_location)
-editor_cmd_location = "{}Binaries/Win64/UE4Editor-cmd.exe".format(engine_location)
 batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
+# editor_location = "{}Binaries/Win64/UE4Editor.exe".format(engine_location)
+# editor_cmd_location = "{}Binaries/Win64/UE4Editor-cmd.exe".format(engine_location)
 
 
 def build():

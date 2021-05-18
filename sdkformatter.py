@@ -1,6 +1,3 @@
-# Pegar os VDFs e setupar os nomes dos arquivos corretamente
-# Montar o run_build.bat corretamente
-
 import vdf
 import os
 import json
@@ -8,17 +5,21 @@ from bitbakedataserializer import load_bitbake_data
 
 
 def app_build_setup():
+    from plasticscm import current_changeset
 
     bitbake_data = load_bitbake_data()
     output_dir = bitbake_data[0]['SteamSDKDirectory'] + "/tools/ContentBuilder/output"
     appid = bitbake_data[0]['AppID']
     steam_branch = bitbake_data[0]['SteamBranch']
 
+    description = "Current Changeset: {}".format(current_changeset())
+
     builder_vdf = vdf.load(open('{}/generic_app_build.vdf'.format(os.path.dirname(__file__)), 'r'))
     depot_vdf = os.getcwd()
 
     # Writes all values to the App Build VDF
     builder_vdf['appbuild']['appid'] = appid
+    builder_vdf['appbuild']['desc'] = description
     builder_vdf['appbuild']['buildoutput'] = output_dir
     builder_vdf['appbuild']['setlive'] = steam_branch
 
@@ -106,8 +107,8 @@ def upload_to_steam(folder_name):
 
 
 if __name__ == '__main__':
-    # app_build_setup()
+    app_build_setup()
     # depot_setup()
     # print("*" * 40)
     # depot_setup("210515_NekoNeko")
-    upload_to_steam("210515_NekoNeko")
+    # upload_to_steam("210515_NekoNeko")
