@@ -2,17 +2,17 @@ import vdf
 import os
 import json
 from bitbakedataserializer import load_bitbake_data
+import plasticscm
 
 
 def app_build_setup():
-    from plasticscm import current_changeset
 
     bitbake_data = load_bitbake_data()
     output_dir = bitbake_data[0]['SteamSDKDirectory'] + "/tools/ContentBuilder/output"
     appid = bitbake_data[0]['AppID']
     steam_branch = bitbake_data[0]['SteamBranch']
 
-    description = "Current Changeset: {}".format(current_changeset())
+    description = "Current Changeset: {}".format(plasticscm.current_changeset())
 
     builder_vdf = vdf.load(open('{}/generic_app_build.vdf'.format(os.path.dirname(__file__)), 'r'))
     depot_vdf = os.getcwd()
@@ -32,7 +32,7 @@ def app_build_setup():
     builder_vdf['appbuild']['depots'][str(depot_key)] = depot_vdf + "\custom_depot.vdf"
 
     # Temporarily dumps users parameters on a VDF
-    with open('custom_app_build.vdf', 'w+') as in_file:
+    with open('{}/custom_app_build.vdf'.format(os.path.dirname(__file__)), 'w+') as in_file:
         in_file.truncate()
         vdf.dump(builder_vdf, in_file, pretty=True)
 
@@ -61,20 +61,9 @@ def depot_setup(build_folder):
     depot_vdf['DepotBuildConfig']['contentroot'] = "{}/{}".format(build_dir, build_folder)
 
     # Temporarily dumps users parameters on a VDF
-    with open('custom_depot.vdf', 'w+') as in_file:
+    with open('{}/custom_depot.vdf'.format(os.path.dirname(__file__)), 'w+') as in_file:
         in_file.truncate()
         vdf.dump(depot_vdf, in_file, pretty=True)
-
-    # Reopens the VDF so its contents are recorded and edits out all \\ from the code
-    # This is only needed because stupid VDF Library doesn't dump Paths with regular \ notation
-    with open('custom_depot.vdf', 'r+') as out_file:
-        all_lines = []
-        for line in out_file:
-            line = line.replace(r'\\', '\\')
-            all_lines.append(line)
-        out_file.seek(0)
-        out_file.truncate()
-        out_file.writelines(all_lines)
 
 
 def upload_to_steam(folder_name):
@@ -101,14 +90,14 @@ def upload_to_steam(folder_name):
                                     '+quit',
                                     ])
 
-    print(upload_config.returncode)
+    print("Process Finished and Build Uploaded")
 
     return upload_config.returncode
 
 
 if __name__ == '__main__':
     app_build_setup()
-    # depot_setup()
+    # depot_setup('210518_NekoNeko')
     # print("*" * 40)
     # depot_setup("210515_NekoNeko")
     # upload_to_steam("210515_NekoNeko")

@@ -1,11 +1,21 @@
 import subprocess
+import unreal
+
 
 
 def current_changeset():
-    changeset_header = subprocess.Popen(['cm', 'status', '--head'], stdout=subprocess.PIPE)
+
+    project_dir = unreal.Paths().project_dir()
+    project_dir = unreal.Paths().convert_relative_path_to_full(project_dir)
+
+    changeset_header = subprocess.Popen(['cm', 'status', '--head'],
+                                        cwd=project_dir,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE
+                                        )
     output, error = changeset_header.communicate()
 
-    if error is None:
+    if error.decode('UTF-8') == '':
         output = output.decode('UTF-8')
         output = output.split("@")
         # Removing "cs:" from the string
@@ -17,4 +27,4 @@ def current_changeset():
 
 
 if __name__ == '__main__':
-    current_changeset()
+    print(current_changeset())
