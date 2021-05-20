@@ -2,17 +2,17 @@ import vdf
 import os
 import json
 from bitbakedataserializer import load_bitbake_data
-import plasticscm
 
 
 def app_build_setup():
+    from plasticscm import current_changeset
 
     bitbake_data = load_bitbake_data()
     output_dir = bitbake_data[0]['SteamSDKDirectory'] + "/tools/ContentBuilder/output"
     appid = bitbake_data[0]['AppID']
     steam_branch = bitbake_data[0]['SteamBranch']
 
-    description = "Current Changeset: {}".format(plasticscm.current_changeset())
+    description = "Current Changeset: {}".format(current_changeset())
 
     builder_vdf = vdf.load(open('{}/generic_app_build.vdf'.format(os.path.dirname(__file__)), 'r'))
     depot_vdf = os.getcwd()
