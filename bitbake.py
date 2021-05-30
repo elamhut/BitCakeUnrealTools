@@ -28,6 +28,8 @@ batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
 
 
 def build():
+    import re
+
     build_config = subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
                                    '-ScriptsForProject="{}"'.format(uproject_path),
                                    'BuildCookRun',
@@ -48,7 +50,28 @@ def build():
                                    '-target=NekoNeko',
                                    '-clientconfig=Development',
                                    '-serverconfig=Development',
-                                   '-utf8output'])
+                                   '-utf8output'],
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE)
+
+    # Decodes STDOUT so it can be manipulated correctly
+    stdoutput = build_config.stdout.decode('UTF-8')
+
+    with open("{}/ConsoleLog.txt".format(os.path.dirname(__file__)), "w+") as Log:
+        splitted = stdoutput.split('\n')
+        uniqueerrors = []
+        for line in splitted:
+            # Check if the line is an empty line \t\n\r only, no whitespaces
+            if re.match(r'^\s*$', line):
+                pass
+            # Check for an error match according to Unreal's pattern and uniquely print it to the log
+            else:
+                matchgroup = re.search(r'LogInit: Display: LogBlueprint: Error: \[.*] (.*): \[', line)
+                if matchgroup is not None:
+                    file_error = matchgroup.group(1)
+                    if file_error not in uniqueerrors:
+                        uniqueerrors.append(file_error)
+                        Log.write('Error: {}\n'.format(file_error))
 
     # Construct the folder name to backup the build and upload to Steam
     folder_name = ""

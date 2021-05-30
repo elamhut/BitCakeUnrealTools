@@ -97,7 +97,7 @@ def upload_to_steam(folder_name):
 
 if __name__ == '__main__':
     app_build_setup()
-    # depot_setup('210518_NekoNeko')
+    # depot_setup('210520_NekoNeko')
     # print("*" * 40)
     # depot_setup("210515_NekoNeko")
     # upload_to_steam("210515_NekoNeko")
