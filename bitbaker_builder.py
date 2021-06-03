@@ -3,7 +3,7 @@ import subprocess
 import os
 import datetime
 import json
-from sdkformatter import upload_to_steam
+from bitbaker_steamsdkmanager import upload_to_steam
 
 data_dir = os.path.dirname(__file__)
 data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')

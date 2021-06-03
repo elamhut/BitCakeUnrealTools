@@ -11,15 +11,28 @@ def load_bitbake_data():
     return bake_data
 
 
-def data_serialize(in_data):
+def data_verify():
+    data = load_bitbake_data()
+    data = data[0].items()
+
+    failed_data = []
+
+    for key, value in data:
+        if value == "":
+            failed_data.append((key, value))
+        else:
+            continue
+
+    return failed_data
+
+
+def data_serialize(key, value):
     # Open Project JSON to Edit
     json_dir = os.path.dirname(__file__)
     json_file = open('{}/generic_projectdata.json'.format(json_dir), 'r+')
     project_json = json.load(json_file)
 
-    # Get Argument, split it into Key and Value and use the Key to find and replace the new Data inside the JSON
-    split_data = in_data.split("|")
-    project_json[0][split_data[0]] = split_data[1]
+    project_json[0][key] = value
 
     # Move Carat to the start of the file, delete everything than write the new data
     json_file.seek(0)
@@ -29,5 +42,4 @@ def data_serialize(in_data):
 
 
 if __name__ == '__main__':
-    bitdata = str(sys.argv[1])
-    data_serialize(bitdata)
+    print(data_verify())

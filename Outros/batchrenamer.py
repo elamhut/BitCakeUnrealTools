@@ -1,4 +1,7 @@
 import unreal
+import sys
+
+from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 
 
 def rename_assets(search_pattern, replace_pattern, use_case):
@@ -36,4 +39,37 @@ def rename_assets(search_pattern, replace_pattern, use_case):
 
     unreal.log("Replaced {} of {} assets".format(replaced, num_assets))
 
-rename_assets("new", "Old", True)
+class RenameGUI(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super(RenameGUI, self).__init__(parent)
+        self.setFixedSize(350, 180)
+
+        # load the created GUI
+        self.widget = QtUiTools.QUiLoader().load(r"D:\NekoNeko\Plugins\BitBaker\Content\Python\UI\renamer.ui")
+        self.widget.setParent(self)
+
+        self.widget.setGeometry(0, 0, self.widget.width(), self.widget.height())
+
+        # find the interaction element
+        self.search = self.widget.findChild(QtWidgets.QLineEdit, "textToReplace")
+        self.replace = self.widget.findChild(QtWidgets.QLineEdit, "newTextHere")
+
+        self.use_case = self.widget.findChild(QtWidgets.QCheckBox, "caseSensitive")
+
+        # find and assing the trigger to pushbutten
+        self.rename_button = self.widget.findChild(QtWidgets.QPushButton, "rename")
+        self.rename_button.clicked.connect(self.rename_handler)
+
+    def rename_handler(self):
+        search_pattern = self.search.text()
+        replace_pattern = self.replace.text()
+        use_case = self.use_case.isChecked()
+
+        rename_assets(search_pattern, replace_pattern, use_case)
+
+app = None
+if not QtWidgets.QApplication.instance():
+    app = QtWidgets.QApplication(sys.argv)
+
+window = RenameGUI()
+window.show()

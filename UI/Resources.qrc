@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="images">
+    <file>bitbaker_250x125.png</file>
+  </qresource>
+</RCC>

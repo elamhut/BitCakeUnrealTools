@@ -1,6 +1,7 @@
 import unreal
 import os
 
+
 menus = unreal.ToolMenus.get()
 
 menu_name = "LevelEditor.LevelEditorToolBar"
@@ -10,7 +11,7 @@ entry = unreal.ToolMenuEntry(type=unreal.MultiBlockType.TOOL_BAR_BUTTON)
 entry.set_label("BitCake Tools")
 
 typ = unreal.ToolMenuStringCommandType.PYTHON
-with open('{}/RunEditorUtilityWidget.py'.format(os.path.dirname(__file__)), 'r') as runwidget:
+with open('{}/bitbaker_ui.py'.format(os.path.dirname(__file__)), 'r') as runwidget:
     pythoncode = runwidget.read()
 
 entry.set_string_command(typ, "", pythoncode)

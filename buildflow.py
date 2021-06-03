@@ -1,12 +1,12 @@
-import bitbake
-import sdkformatter
+import bitbaker_builder
+import bitbaker_steamsdkmanager
 import plasticscm
 from importlib import *
 
 
-reload(sdkformatter)
-reload(bitbake)
+reload(bitbaker_steamsdkmanager)
+reload(bitbaker_builder)
 reload(plasticscm)
 
-build = bitbake.build()
+build = bitbaker_builder.build()
 # sdkformatter.upload_to_steam(build)

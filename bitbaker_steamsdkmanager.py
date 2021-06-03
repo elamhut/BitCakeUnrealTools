@@ -1,7 +1,7 @@
 import vdf
 import os
 import json
-from bitbakedataserializer import load_bitbake_data
+from bitbaker_dataserializer import load_bitbake_data
 
 
 def app_build_setup():
