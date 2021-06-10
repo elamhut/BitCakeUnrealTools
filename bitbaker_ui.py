@@ -74,6 +74,13 @@ class SimpleGUI(QtWidgets.QWidget):
         self.btn_buildonly = self.widget.findChild(QtWidgets.QPushButton, "buildonlyButton")
         self.btn_buildonly.clicked.connect(self.build_only)
 
+        self.output_log = self.widget.findChild(QtWidgets.QTextBrowser, "outputLog")
+        self.output_log.setOpenExternalLinks(False)
+        self.output_log.setOpenLinks(False)
+
+
+
+
 
     # Define functions for each field and button
     def set_login(self):
@@ -97,14 +104,14 @@ class SimpleGUI(QtWidgets.QWidget):
         if os.path.exists(value):
             bds.data_serialize('SteamSDKDirectory', value)
         else:
-            QtWidgets.QMessageBox.warning(self, "Path Error!", "Path does not exist!\nInvalid Path.")
+            QtWidgets.QMessageBox.warning(self, "Path Error!", "Path to SteamSDK does not exist!\nInvalid Path.")
 
     def build_folderpath(self):
         value = self.buildfolderBox.text()
         if os.path.exists(value):
             bds.data_serialize('BuildDirectory', value)
         else:
-            QtWidgets.QMessageBox.warning(self, "Path Error!", "Path does not exist!\nInvalid Path.")
+            QtWidgets.QMessageBox.warning(self, "Path Error!", "Path to the Build Folder does not exist!\nInvalid Path.")
 
     def btn_steam_folderpath(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
