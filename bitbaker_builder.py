@@ -3,6 +3,7 @@ import subprocess
 import os
 import datetime
 import json
+import re
 from bitbaker_steamsdkmanager import upload_to_steam
 
 data_dir = os.path.dirname(__file__)
@@ -28,7 +29,6 @@ batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
 
 
 def build():
-    import re
 
     build_config = subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
                                    '-ScriptsForProject="{}"'.format(uproject_path),

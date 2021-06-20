@@ -60,8 +60,8 @@ def depot_setup(build_folder):
     depot_vdf['DepotBuildConfig']['DepotID'] = str(depot_id)
     depot_vdf['DepotBuildConfig']['contentroot'] = "{}/{}".format(build_dir, build_folder)
 
-    # Temporarily dumps users parameters on a VDF
-    with open('{}/custom_depot.vdf'.format(os.path.dirname(__file__)), 'w+') as in_file:
+    # Dumps users parameters on a VDF
+    with open('{}/custom_depot.vdf'.format(os.path.dirname(__file__)), 'r+') as in_file:
         in_file.truncate()
         vdf.dump(depot_vdf, in_file, pretty=True)
 
@@ -96,8 +96,8 @@ def upload_to_steam(folder_name):
 
 
 if __name__ == '__main__':
-    app_build_setup()
-    # depot_setup('210520_NekoNeko')
+    # app_build_setup()
+    depot_setup('')
     # print("*" * 40)
     # depot_setup("210515_NekoNeko")
     # upload_to_steam("210515_NekoNeko")

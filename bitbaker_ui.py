@@ -14,8 +14,8 @@ reload(bitbaker_builder)
 reload(bitbaker_steamsdkmanager)
 
 
-ui_dir = unreal.Paths.project_plugins_dir()
-ui_dir = unreal.Paths.convert_relative_path_to_full(ui_dir)
+plugin_dir = unreal.Paths.project_plugins_dir()
+plugin_dir = unreal.Paths.convert_relative_path_to_full(plugin_dir)
 editor_level_lib = unreal.EditorLevelLibrary()
 
 
@@ -24,14 +24,14 @@ class SimpleGUI(QtWidgets.QWidget):
         super(SimpleGUI, self).__init__(parent)
 
         # load the created ui widget
-        self.widget = QtUiTools.QUiLoader().load("{}BitBaker/Content/Python/UI/bitbaker.ui".format(ui_dir))
+        self.widget = QtUiTools.QUiLoader().load("{}BitBaker/Content/Python/UI/bitbaker.ui".format(plugin_dir))
 
         # attach the widget to the "self" GUI
         self.widget.setParent(self)
 
         # set the UI geometry (if UI is not centered/visible)
         self.widget.setGeometry(0, 0, self.widget.width(), self.widget.height())
-        self.setFixedSize(770, 850)
+        self.setFixedSize(770, 900)
 
         # get the data from the json so we can pre-fill fields with them
         baker_data = bds.load_bitbake_data()
@@ -74,13 +74,10 @@ class SimpleGUI(QtWidgets.QWidget):
         self.btn_buildonly = self.widget.findChild(QtWidgets.QPushButton, "buildonlyButton")
         self.btn_buildonly.clicked.connect(self.build_only)
 
-        self.output_log = self.widget.findChild(QtWidgets.QTextBrowser, "outputLog")
-        self.output_log.setOpenExternalLinks(False)
-        self.output_log.setOpenLinks(False)
+        self.output_log = self.widget.findChild(QtWidgets.QListWidget, "outputLog")
 
-
-
-
+        self.btn_testlog = self.widget.findChild(QtWidgets.QPushButton, "testOutputLog")
+        self.btn_testlog.clicked.connect(self.output_logger)
 
     # Define functions for each field and button
     def set_login(self):
@@ -148,6 +145,11 @@ class SimpleGUI(QtWidgets.QWidget):
 
         else:
             bitbaker_builder.build()
+
+    def output_logger(self):
+        with open("{}BitBaker/Content/Python/ConsoleLog.txt".format(plugin_dir), "r") as Log:
+            for line in Log.readlines():
+                self.output_log.addItem(str(line))
 
 
 

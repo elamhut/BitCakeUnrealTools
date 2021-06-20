@@ -32,14 +32,19 @@ def data_serialize(key, value):
     json_file = open('{}/generic_projectdata.json'.format(json_dir), 'r+')
     project_json = json.load(json_file)
 
-    project_json[0][key] = value
+    if project_json[0][key] == value:
+        print("Value already registered")
+        return
+    else:
+        project_json[0][key] = value
+        # Move Carat to the start of the file, delete everything than write the new data
+        json_file.seek(0)
+        json_file.truncate()
+        json_file.write(json.dumps(project_json, indent=4))
+        json_file.close()
 
-    # Move Carat to the start of the file, delete everything than write the new data
-    json_file.seek(0)
-    json_file.truncate()
-    json_file.write(json.dumps(project_json, indent=4))
-    json_file.close()
+        return
 
 
 if __name__ == '__main__':
-    print(data_verify())
+    print(data_serialize("SteamBranch", "internaltest"))
