@@ -8,15 +8,16 @@ from PySide6 import QtUiTools, QtWidgets
 
 from importlib import *
 
-
 reload(bds)
 reload(bitbaker_builder)
 reload(bitbaker_steamsdkmanager)
 
-
 plugin_dir = unreal.Paths.project_plugins_dir()
 plugin_dir = unreal.Paths.convert_relative_path_to_full(plugin_dir)
 editor_level_lib = unreal.EditorLevelLibrary()
+editor_asset_lib = unreal.EditorAssetLibrary()
+asset_editor_sub = unreal.AssetEditorSubsystem()
+
 
 
 class SimpleGUI(QtWidgets.QWidget):
@@ -75,9 +76,10 @@ class SimpleGUI(QtWidgets.QWidget):
         self.btn_buildonly.clicked.connect(self.build_only)
 
         self.output_log = self.widget.findChild(QtWidgets.QListWidget, "outputLog")
+        self.output_log.itemDoubleClicked.connect(self.open_asset)
 
         self.btn_testlog = self.widget.findChild(QtWidgets.QPushButton, "testOutputLog")
-        self.btn_testlog.clicked.connect(self.output_logger)
+        self.btn_testlog.clicked.connect(self.setup_output)
 
     # Define functions for each field and button
     def set_login(self):
@@ -108,7 +110,8 @@ class SimpleGUI(QtWidgets.QWidget):
         if os.path.exists(value):
             bds.data_serialize('BuildDirectory', value)
         else:
-            QtWidgets.QMessageBox.warning(self, "Path Error!", "Path to the Build Folder does not exist!\nInvalid Path.")
+            QtWidgets.QMessageBox.warning(self, "Path Error!",
+                                          "Path to the Build Folder does not exist!\nInvalid Path.")
 
     def btn_steam_folderpath(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
@@ -129,11 +132,48 @@ class SimpleGUI(QtWidgets.QWidget):
             for entries in verification:
                 error_keys.append(entries[0])
 
-            QtWidgets.QMessageBox.warning(self, "Missing Data!", "{} Field(s) has(have) no data.".format(str(error_keys)[1:-2]))
+            QtWidgets.QMessageBox.warning(self, "Missing Data!",
+                                          "{} Field(s) has(have) no data.".format(str(error_keys)[1:-2]))
 
         else:
             build = bitbaker_builder.build()
             bitbaker_steamsdkmanager.upload_to_steam(build)
+
+    def setup_output(self):
+        asset_editor = unreal.AssetEditorSubsystem()
+        editor_asset = unreal.EditorAssetLibrary()
+
+        with open("{}BitBaker/Content/Python/ConsoleLog.txt".format(plugin_dir), "r") as Log:
+            broken_assets = []
+            lines = Log.readlines()
+            for line in lines:
+                asset_paths = line.rstrip()
+                asset_paths = asset_paths.split('|')
+                self.output_log.addItem(str(asset_paths[0]))
+                print(asset_paths)
+
+
+    def open_asset(self, item):
+        print(item.text())
+        selected_asset = item.text()
+        with open("{}BitBaker/Content/Python/ConsoleLog.txt".format(plugin_dir), "r") as Log:
+            lines = Log.readlines()
+            for line in lines:
+                asset_paths = line.rstrip()
+                asset_paths = asset_paths.split('|')
+                if selected_asset == asset_paths[0]:
+                    broken_assets = []
+                    # Checks if there's a Map file extension in the errors, if so don't try to load it.
+                    # Do this by splitting the '.' and getting the last string in the asset_paths
+                    get_extension = asset_paths[0].split('.')
+                    if get_extension[-1] != 'umap':
+                        # Load the Asset then add it to the asset_paths so we can open it.
+                        broken_assets.append(editor_asset_lib.load_asset(asset_paths[1]))
+                        asset_editor_sub.open_editor_for_assets(broken_assets)
+                    else:
+                        editor_level_lib.load_level(asset_paths[1])
+
+
 
     def build_only(self):
         verification = bds.data_verify()
@@ -150,7 +190,6 @@ class SimpleGUI(QtWidgets.QWidget):
         with open("{}BitBaker/Content/Python/ConsoleLog.txt".format(plugin_dir), "r") as Log:
             for line in Log.readlines():
                 self.output_log.addItem(str(line))
-
 
 
 # Only create one instance of the GUI when it's not already running

@@ -1,1 +1,1 @@
-Error: D:\NekoNeko\Content\NekoNeko\Core\GameModes\BP_Main_GameStateBase.uasset
+Error: D:\NekoNeko\Content\NekoNeko\Core\GameModes\BP_Main_GameStateBase.uasset|/Game/NekoNeko/Core/GameModes/BP_Main_GameStateBase.BP_Main_GameStateBaseError: D:\NekoNeko\Content\NekoNeko\Maps\World2\Museum\Museum_P.umap|/Game/NekoNeko/Maps/World2/Museum/Museum_P.Museum_P:PersistentLevel.Museum_P

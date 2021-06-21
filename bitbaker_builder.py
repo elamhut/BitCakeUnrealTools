@@ -24,12 +24,13 @@ uproject_path = unreal.Paths().convert_relative_path_to_full(uproject_path)
 engine_location = unreal.Paths().engine_dir()
 engine_location = unreal.Paths().convert_relative_path_to_full(engine_location)
 batch_files_dir = "{}Build/BatchFiles/".format(engine_location)
+
+
 # editor_location = "{}Binaries/Win64/UE4Editor.exe".format(engine_location)
 # editor_cmd_location = "{}Binaries/Win64/UE4Editor-cmd.exe".format(engine_location)
 
 
 def build():
-
     build_config = subprocess.run(['{}RunUAT.bat'.format(batch_files_dir),
                                    '-ScriptsForProject="{}"'.format(uproject_path),
                                    'BuildCookRun',
@@ -57,6 +58,14 @@ def build():
     # Decodes STDOUT so it can be manipulated correctly
     stdoutput = build_config.stdout.decode('UTF-8')
 
+    if build_config.returncode == 0:
+        build_folder()
+    else:
+        treat_error(stdoutput)
+
+
+def treat_error(stdoutput):
+    # Open Console Log file so we can dump the treated errors inside
     with open("{}/ConsoleLog.txt".format(os.path.dirname(__file__)), "w+") as Log:
         splitted = stdoutput.split('\n')
         uniqueerrors = []
@@ -66,28 +75,28 @@ def build():
                 pass
             # Check for an error match according to Unreal's pattern and uniquely print it to the log
             else:
-                matchgroup = re.search(r'LogInit: Display: LogBlueprint: Error: \[.*] (.*): \[', line)
+                matchgroup = re.search(r'LogInit: Display: LogBlueprint: Error: \[.*] (.*): \[.*:\s(.*)', line)
                 if matchgroup is not None:
-                    file_error = matchgroup.group(1)
+                    file_error = matchgroup.group(1) + '|' + matchgroup.group(2)
                     if file_error not in uniqueerrors:
                         uniqueerrors.append(file_error)
-                        Log.write('Error: {}\n'.format(file_error))
+                        Log.write('Error: {}'.format(file_error))
 
-    # Construct the folder name to backup the build and upload to Steam
-    folder_name = ""
-    if build_config.returncode == 0:
-        # Construct Paths and Folder Name base on today's date
-        date = datetime.datetime.now().strftime("%y%m%d")
-        folder_name = "{}_{}".format(date, project_name)
-        constructed_path = "{}/{}".format(build_user_dir, folder_name)
 
-        # Check if there's already a build today and replace it, otherwise just rename the folder
-        if os.path.isdir("{}".format(constructed_path)):
-            from shutil import rmtree
-            rmtree("{}".format(constructed_path))
-            os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
-        else:
-            os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
+
+def build_folder():
+    # Construct Paths and Folder Name base on today's date
+    date = datetime.datetime.now().strftime("%y%m%d")
+    folder_name = "{}_{}".format(date, project_name)
+    constructed_path = "{}/{}".format(build_user_dir, folder_name)
+
+    # Check if there's already a build today and replace it, otherwise just rename the folder
+    if os.path.isdir("{}".format(constructed_path)):
+        from shutil import rmtree
+        rmtree("{}".format(constructed_path))
+        os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
+    else:
+        os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
 
     return folder_name
 
