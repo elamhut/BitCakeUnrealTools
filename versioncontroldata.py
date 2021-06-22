@@ -1,7 +1,20 @@
 import subprocess
 import unreal
+from datetime import datetime
 
 
+def check_for_vcs():
+    # Check if there's a .plastic folder and if so,
+    project_dir = unreal.Paths().project_dir()
+    project_dir = unreal.Paths().convert_relative_path_to_full(project_dir)
+    plastic_dir = "{}.plastic".format(project_dir)
+
+    if unreal.Paths.directory_exists(plastic_dir):
+        return current_changeset()
+    else:
+        now = datetime.now()
+        date_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        return date_string
 
 def current_changeset():
 
@@ -22,9 +35,6 @@ def current_changeset():
         output = output[0][3:]
         return output
 
-    else:
-        return "Plastic SCM not Found"
-
 
 if __name__ == '__main__':
-    print(current_changeset())
+    print(check_for_vcs())

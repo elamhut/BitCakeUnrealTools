@@ -60,8 +60,11 @@ def build():
 
     if build_config.returncode == 0:
         build_folder()
+        print("Build Complete")
+        return True
     else:
         treat_error(stdoutput)
+        return False
 
 
 def treat_error(stdoutput):
@@ -75,13 +78,16 @@ def treat_error(stdoutput):
                 pass
             # Check for an error match according to Unreal's pattern and uniquely print it to the log
             else:
-                matchgroup = re.search(r'LogInit: Display: LogBlueprint: Error: \[.*] (.*): \[.*:\s(.*)', line)
+                matchgroup = re.search(r'.*Error: \[.*] (.*): \[.*:\s(.*)|.*ERROR: (.*)', line)
                 if matchgroup is not None:
-                    file_error = matchgroup.group(1) + '|' + matchgroup.group(2)
+                    if matchgroup.group(1) is not None:
+                        file_error = matchgroup.group(1) + '|' + matchgroup.group(2)
+                    else:
+                        file_error = matchgroup.group(3)
+
                     if file_error not in uniqueerrors:
                         uniqueerrors.append(file_error)
                         Log.write('Error: {}'.format(file_error))
-
 
 
 def build_folder():
@@ -97,8 +103,6 @@ def build_folder():
         os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
     else:
         os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
-
-    return folder_name
 
 
 if __name__ == "__main__":

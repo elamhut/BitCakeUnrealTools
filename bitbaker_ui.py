@@ -19,7 +19,6 @@ editor_asset_lib = unreal.EditorAssetLibrary()
 asset_editor_sub = unreal.AssetEditorSubsystem()
 
 
-
 class SimpleGUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(SimpleGUI, self).__init__(parent)
@@ -32,7 +31,7 @@ class SimpleGUI(QtWidgets.QWidget):
 
         # set the UI geometry (if UI is not centered/visible)
         self.widget.setGeometry(0, 0, self.widget.width(), self.widget.height())
-        self.setFixedSize(770, 900)
+        self.setFixedSize(770, 825)
 
         # get the data from the json so we can pre-fill fields with them
         baker_data = bds.load_bitbake_data()
@@ -78,8 +77,8 @@ class SimpleGUI(QtWidgets.QWidget):
         self.output_log = self.widget.findChild(QtWidgets.QListWidget, "outputLog")
         self.output_log.itemDoubleClicked.connect(self.open_asset)
 
-        self.btn_testlog = self.widget.findChild(QtWidgets.QPushButton, "testOutputLog")
-        self.btn_testlog.clicked.connect(self.setup_output)
+        # self.btn_testlog = self.widget.findChild(QtWidgets.QPushButton, "testOutputLog")
+        # self.btn_testlog.clicked.connect(self.setup_output)
 
     # Define functions for each field and button
     def set_login(self):
@@ -126,18 +125,35 @@ class SimpleGUI(QtWidgets.QWidget):
     # Button functions that verify if all data is typed and correct
     def build_and_upload(self):
         verification = bds.data_verify()
+        self.output_log.clear()
 
         if len(verification) > 0:
             error_keys = []
             for entries in verification:
                 error_keys.append(entries[0])
-
             QtWidgets.QMessageBox.warning(self, "Missing Data!",
                                           "{} Field(s) has(have) no data.".format(str(error_keys)[1:-2]))
+        else:
+            build = bitbaker_builder.build()
+            if not build:
+                self.setup_output()
+            else:
+                bitbaker_steamsdkmanager.upload_to_steam(build)
+
+    def build_only(self):
+        verification = bds.data_verify()
+        self.output_log.clear()
+
+        if len(verification) > 0:
+            for entries in verification:
+                if entries[0] == 'BuildDirectory':
+                    QtWidgets.QMessageBox.warning(self, "Missing Data!", "You need to set a Build Folder.")
 
         else:
             build = bitbaker_builder.build()
-            bitbaker_steamsdkmanager.upload_to_steam(build)
+            if not build:
+                self.setup_output()
+
 
     def setup_output(self):
         asset_editor = unreal.AssetEditorSubsystem()
@@ -152,7 +168,6 @@ class SimpleGUI(QtWidgets.QWidget):
                 self.output_log.addItem(str(asset_paths[0]))
                 print(asset_paths)
 
-
     def open_asset(self, item):
         print(item.text())
         selected_asset = item.text()
@@ -161,7 +176,9 @@ class SimpleGUI(QtWidgets.QWidget):
             for line in lines:
                 asset_paths = line.rstrip()
                 asset_paths = asset_paths.split('|')
-                if selected_asset == asset_paths[0]:
+                # Check for a Pipe, because we can only open assets that have an address
+                # If not, then it's just a regular error
+                if selected_asset == asset_paths[0] and len(asset_paths) > 1:
                     broken_assets = []
                     # Checks if there's a Map file extension in the errors, if so don't try to load it.
                     # Do this by splitting the '.' and getting the last string in the asset_paths
@@ -172,24 +189,9 @@ class SimpleGUI(QtWidgets.QWidget):
                         asset_editor_sub.open_editor_for_assets(broken_assets)
                     else:
                         editor_level_lib.load_level(asset_paths[1])
-
-
-
-    def build_only(self):
-        verification = bds.data_verify()
-
-        if len(verification) > 0:
-            for entries in verification:
-                if entries[0] == 'BuildDirectory':
-                    QtWidgets.QMessageBox.warning(self, "Missing Data!", "You need to set a Build Folder.")
-
-        else:
-            bitbaker_builder.build()
-
-    def output_logger(self):
-        with open("{}BitBaker/Content/Python/ConsoleLog.txt".format(plugin_dir), "r") as Log:
-            for line in Log.readlines():
-                self.output_log.addItem(str(line))
+                else:
+                    unreal.log("Cannot find asset specified.")
+                    break
 
 
 # Only create one instance of the GUI when it's not already running

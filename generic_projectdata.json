@@ -5,7 +5,7 @@
         "AppID": "1030000",
         "SteamSDKDirectory": "D:/SteamSDK",
         "BuildDirectory": "D:/NekoNeko/Build",
-        "SteamBranch": "internaltest",
+        "SteamBranch": "develop",
         "SteamLogin": "bitcakestudio",
         "SteamPassword": "bitcake1406"
     }
