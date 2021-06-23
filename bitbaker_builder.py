@@ -10,6 +10,7 @@ data_dir = os.path.dirname(__file__)
 data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')
 bake_data = json.load(data_file)
 
+
 # Get all the variables from the GUI
 project_name = bake_data[0]['ProjectName']
 appid = bake_data[0]['AppID']
