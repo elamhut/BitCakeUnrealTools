@@ -1,11 +1,14 @@
 import vdf
 import os
 import json
+import unreal
 from bitbaker_dataserializer import load_bitbake_data
 from versioncontroldata import check_for_vcs
 
 
 def app_build_setup():
+    plugin_dir = unreal.Paths.project_plugins_dir()
+    plugin_dir = unreal.Paths.convert_relative_path_to_full(plugin_dir)
 
     bitbake_data = load_bitbake_data()
     output_dir = bitbake_data[0]['SteamSDKDirectory'] + "/tools/ContentBuilder/output"
@@ -15,7 +18,7 @@ def app_build_setup():
     description = "Current Changeset: {}".format(check_for_vcs())
 
     builder_vdf = vdf.load(open('{}/generic_app_build.vdf'.format(os.path.dirname(__file__)), 'r'))
-    depot_vdf = os.getcwd()
+    depot_vdf = "{}BitBaker/Content/Python/custom_depot.vdf".format(plugin_dir)
 
     # Writes all values to the App Build VDF
     builder_vdf['appbuild']['appid'] = appid
@@ -29,7 +32,7 @@ def app_build_setup():
     # Hack to increase app id by 1, assuming the base Steam Depots are always AppID + 1
     # TODO: Add support for more than 1 depot
     depot_key = int(appid) + 1
-    builder_vdf['appbuild']['depots'][str(depot_key)] = depot_vdf + "\custom_depot.vdf"
+    builder_vdf['appbuild']['depots'][str(depot_key)] = depot_vdf
 
     # Temporarily dumps users parameters on a VDF
     with open('{}/custom_app_build.vdf'.format(os.path.dirname(__file__)), 'w+') as in_file:

@@ -60,7 +60,6 @@ def build():
     stdoutput = build_config.stdout.decode('UTF-8')
 
     if build_config.returncode == 0:
-        build_folder()
         print("Build Complete")
         return True
     else:
@@ -104,6 +103,8 @@ def build_folder():
         os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
     else:
         os.rename("{}/WindowsNoEditor/".format(build_user_dir), "{}".format(constructed_path))
+
+    return folder_name
 
 
 if __name__ == "__main__":

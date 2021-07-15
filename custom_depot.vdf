@@ -1,7 +1,7 @@
 "DepotBuildConfig"
 {
 	"DepotID" "1030001"
-	"contentroot" "D:/NekoNeko/Build/"
+	"contentroot" "D:/NekoNeko/Build/210715_NekoNeko"
 	"FileMapping"
 	{
 		"LocalPath" "*"

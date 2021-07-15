@@ -1,1 +1,1 @@
-Error: The following files are set to be staged, but contain restricted folder names ("Switch"):
+Error: D:\NekoNeko\Content\NekoNeko\Widgets\LevelSelection\BP_LevelSelection_3DWidget.uasset|/Game/NekoNeko/Widgets/LevelSelection/BP_LevelSelection_3DWidget.BP_LevelSelection_3DWidgetError: Cook failed.

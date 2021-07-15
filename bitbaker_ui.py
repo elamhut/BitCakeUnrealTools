@@ -138,7 +138,7 @@ class SimpleGUI(QtWidgets.QWidget):
             if not build:
                 self.setup_output()
             else:
-                bitbaker_steamsdkmanager.upload_to_steam(build)
+                bitbaker_steamsdkmanager.upload_to_steam(bitbaker_builder.build_folder())
 
     def build_only(self):
         verification = bds.data_verify()

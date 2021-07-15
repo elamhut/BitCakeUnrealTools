@@ -1,14 +1,14 @@
 "appbuild"
 {
 	"appid" "1030000"
-	"desc" "Current Changeset: "
+	"desc" "Current Changeset: 1524"
 	"buildoutput" "D:/SteamSDK/tools/ContentBuilder/output"
 	"contentroot" ""
-	"setlive" "internaltest"
+	"setlive" "develop"
 	"preview" "0"
 	"local" ""
 	"depots"
 	{
-		"1030001" "D:\\Unreal\\UE_4.26\\Engine\\Binaries\\Win64\\custom_depot.vdf"
+		"1030001" "D:/NekoNeko/Plugins/BitBaker/Content/Python/custom_depot.vdf"
 	}
 }
