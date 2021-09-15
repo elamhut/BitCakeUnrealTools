@@ -1,5 +1,26 @@
+import subprocess
 import unreal
 import os
+
+try:
+    import vdf
+except ImportError:
+    engine_location = unreal.Paths().engine_dir()
+    engine_location = unreal.Paths().convert_relative_path_to_full(engine_location)
+    python_location = engine_location + r"\Binaries\ThirdParty\Python3\Win64\python.exe"
+
+    plugin_location = unreal.Paths().project_plugins_dir()
+    plugin_location = unreal.Paths().convert_relative_path_to_full(plugin_location)
+    requirements_location = plugin_location + r"\BitBaker\Content\Python\requirements.txt"
+
+    print("Engine Location" + python_location)
+    print("Starting Pip Install")
+    tryinstall = subprocess.run([python_location, "-m", "pip", "install", "-r", requirements_location, "--user"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stderror = tryinstall.stderr.decode('UTF-8')
+    print(stderror)
+    print("*" * 40)
+    print("Finished Pip Install")
 
 
 menus = unreal.ToolMenus.get()

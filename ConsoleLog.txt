@@ -1,1 +1,1 @@
-Error: D:\NekoNeko\Content\NekoNeko\Widgets\LevelSelection\BP_LevelSelection_3DWidget.uasset|/Game/NekoNeko/Widgets/LevelSelection/BP_LevelSelection_3DWidget.BP_LevelSelection_3DWidgetError: Cook failed.
+Error: System.IO.DirectoryNotFoundException: Could not find a part of the path 'D:\NekoNeko\Content\FMOD\Desktop'.

@@ -16,6 +16,7 @@ def check_for_vcs():
         date_string = now.strftime("%d/%m/%Y %H:%M:%S")
         return date_string
 
+
 def current_changeset():
 
     project_dir = unreal.Paths().project_dir()

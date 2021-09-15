@@ -6,6 +6,7 @@ import json
 import re
 from bitbaker_steamsdkmanager import upload_to_steam
 
+
 data_dir = os.path.dirname(__file__)
 data_file = open("{}/generic_projectdata.json".format(data_dir), 'r')
 bake_data = json.load(data_file)
