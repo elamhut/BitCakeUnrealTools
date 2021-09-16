@@ -1,14 +1,14 @@
 "appbuild"
 {
-	"appid" "1030000"
-	"desc" "Current Changeset: 15/09/2021 13:00:15"
-	"buildoutput" "D:/SteamSDK/tools/ContentBuilder/output"
+	"appid" ""
+	"desc" ""
+	"buildoutput" ""
 	"contentroot" ""
-	"setlive" "develop"
+	"setlive" ""
 	"preview" "0"
 	"local" ""
 	"depots"
 	{
-		"1030001" "D:/GitProjects/NekoNeko/Plugins/BitBaker/Content/Python/custom_depot.vdf"
+		"" ""
 	}
 }

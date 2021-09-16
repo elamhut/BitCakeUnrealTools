@@ -1,12 +1,12 @@
 [
     {
-        "Name": "NekoNekoData",
-        "ProjectName": "NekoNeko",
-        "AppID": "1030000",
-        "SteamSDKDirectory": "D:/SteamSDK",
-        "BuildDirectory": "D:/NekoNeko/Build",
-        "SteamBranch": "develop",
-        "SteamLogin": "bitcakestudio",
-        "SteamPassword": "bitcake1406"
+        "Name": "ProjectName",
+        "ProjectName": "ProjectName",
+        "AppID": "",
+        "SteamSDKDirectory": "C:/",
+        "BuildDirectory": "C:/",
+        "SteamBranch": "",
+        "SteamLogin": "",
+        "SteamPassword": ""
     }
 ]
